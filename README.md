@@ -1,5 +1,5 @@
 # 모아모아 
-걸스인텍 해커톤 프로젝트 Backend API 
+서울 우먼 테크 해커톤 프로젝트 Backend API 
 
 ## Description
 Node v20.5.0

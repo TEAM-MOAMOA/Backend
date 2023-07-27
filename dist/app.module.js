@@ -8,20 +8,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
-const talent_list_controller_1 = require("./talent-list/talent-list.controller");
-const teacher_controller_1 = require("./teacher/teacher.controller");
-const lesson_controller_1 = require("./lesson/lesson.controller");
-const post_controller_1 = require("./post/post.controller");
-const user_controller_1 = require("./user/user.controller");
+const lesson_module_1 = require("./module/lesson/lesson.module");
+const talent_list_module_1 = require("./module/talent-list/talent-list.module");
+const teacher_module_1 = require("./module/teacher/teacher.module");
+const user_module_1 = require("./module/user/user.module");
+const post_module_1 = require("./module/post/post.module");
+const config_1 = require("@nestjs/config");
+const configuration_1 = require("./config/configuration");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
-        controllers: [app_controller_1.AppController, talent_list_controller_1.TalentListController, teacher_controller_1.TeacherController, lesson_controller_1.LessonController, post_controller_1.PostController, user_controller_1.UserController],
-        providers: [app_service_1.AppService],
+        imports: [
+            lesson_module_1.LessonModule,
+            talent_list_module_1.TalentListModule,
+            teacher_module_1.TeacherModule,
+            user_module_1.UserModule,
+            post_module_1.PostModule,
+            config_1.ConfigModule.forRoot({
+                load: [configuration_1.default],
+            }),
+        ],
+        controllers: [],
+        providers: [],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
