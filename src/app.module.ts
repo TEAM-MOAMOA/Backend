@@ -9,7 +9,14 @@ import { UserController } from './user/user.controller';
 
 @Module({
   imports: [],
-  controllers: [AppController, TalentListController, TeacherController, LessonController, PostController, UserController],
+  controllers: [
+    AppController,
+    TalentListController,
+    TeacherController,
+    LessonController,
+    PostController,
+    UserController,
+  ],
   providers: [AppService],
 })
 export class AppModule {}

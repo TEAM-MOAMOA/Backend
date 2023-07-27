@@ -1,8 +1,8 @@
 {
-  "name": "main-home-api",
+  "name": "moa-moa-api",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Women in Tech seoul Hackathon project",
+  "author": "양유리",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -35,13 +35,13 @@
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
     "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^5.59.11",
-    "@typescript-eslint/parser": "^5.59.11",
-    "eslint": "^8.42.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.9.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "jest": "^29.5.0",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.0",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
@@ -66,5 +66,7 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "main": "main.ts",
+  "repository": "https://github.com/TEAM-MOAMOA/Backend.git"
 }

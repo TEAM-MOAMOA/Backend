@@ -1,4 +1,12 @@
-import { Controller, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  NotFoundException,
+} from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
 interface PostData {
@@ -13,7 +21,11 @@ export class PostController {
   private posts: PostData[] = [];
 
   @Post()
-  createPost(@Body() postData: PostData): { result: boolean; data: PostData; message: string } {
+  createPost(@Body() postData: PostData): {
+    result: boolean;
+    data: PostData;
+    message: string;
+  } {
     const newPost: PostData = {
       id: uuidv4(), // UUID로 생성
       category: postData.category,
@@ -23,11 +35,18 @@ export class PostController {
 
     this.posts.push(newPost);
 
-    return { result: true, message: '새로운 글이 작성되었습니다.', data: newPost };
+    return {
+      result: true,
+      message: '새로운 글이 작성되었습니다.',
+      data: newPost,
+    };
   }
 
   @Put(':id')
-  updatePost(@Param('id') id: string, @Body() updatedData: PostData): { result: boolean; data: PostData; message: string } {
+  updatePost(
+    @Param('id') id: string,
+    @Body() updatedData: PostData,
+  ): { result: boolean; data: PostData; message: string } {
     const post = this.posts.find((post) => post.id === id);
 
     if (!post) {
