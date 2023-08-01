@@ -1,156 +1,144 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Param,
-  Body,
-  NotFoundException,
-} from '@nestjs/common';
-import { Teacher } from './teacher.interface';
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Post, Param, Body, Query, NotFoundException } from "@nestjs/common";
+import { ApiTags, ApiOperation, ApiResponse, ApiBadRequestResponse, ApiQuery } from "@nestjs/swagger";
+import { TeacherProfile, TeacherReview } from "./interface/teacher.interface";
 
-interface TeacherProfile {
-  id: number;
-  name: string;
-  subject: string;
-  reviews: TeacherReview[]; // 선생님의 리뷰 목록
-  // 다른 선생님 프로필 관련 정보들
-}
-
-interface TeacherReview {
-  id: number;
-  userId: number; // 사용자의 ID
-  rating: number;
-  comment: string;
-  // 다른 리뷰 관련 정보들
-}
-
-@Controller('teacher')
+@ApiTags("teacher")
+@Controller("teacher")
 export class TeacherController {
-  private teachers: Teacher[] = [
+  private teachers: TeacherProfile[] = [
     {
-      id: 1,
-      name: 'sang hoon',
+      childname: '상훈',
+      gender: '남성',
       age: 30,
-      gender: 'Male',
-      subject: 'Music',
-      profileImage: 'profile1.jpg',
-      reviewScore: 4.4,
+      rating: 4.2,
+      distance: 232,
+      phonenumber: '01012345678',
+      place: '서울 스페이스 살림 다목적홀',
+      reviews: [], // 리뷰 목록은 비어있습니다. 리뷰는 따로 추가해야 합니다.
     },
-    {
-      id: 2,
-      name: 'ta ill',
-      age: 20,
-      gender: 'Male',
-      subject: 'Art',
-      profileImage: 'profile2.jpg',
-      reviewScore: 4.5,
-    },
-    {
-      id: 3,
-      name: 'sal gu',
-      age: 20,
-      gender: 'Male',
-      subject: 'Science',
-      profileImage: 'profile3.jpg',
-      reviewScore: 4.3,
-    },
-    // 다른 선생님 데이터들
   ];
 
-  private teacherProfiles: TeacherProfile[] = []; // 선생님 프로필 정보를 저장할 배열
+  // 선생님 프로필 조회 API
+  @ApiOperation({ summary: "선생님 프로필 조회", description: "선생님의 프로필을 조회합니다." })
+  @ApiQuery({ name: "id", description: "Teacher ID", type: Number })
+  @ApiResponse({
+    status: 200,
+    description: "Success",
+    schema: {
+      type: 'object',
+      properties: {
+        result: { type: 'boolean' },
+        data: { $ref: 'TeacherProfile' },
+        message: { type: 'string' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: "Not Found",
+    schema: {
+      type: 'object',
+      properties: {
+        result: { type: 'boolean' },
+        data: { $ref: 'Null' },
+        message: { type: 'string' },
+      },
+    },
+  })
+  @Get(":id")
+  getTeacherProfile(@Param("id") teacherId: number): {
+    result: boolean;
+    data: TeacherProfile;
+    message: string;
+  } {
+    const teacherProfile = this.teachers.find((teacher) => teacher.childname === String(teacherId));
 
-  private teacherReviewIdCounter = 1;
 
-  @Post(':id/reviews')
-  writeTeacherReview(
-    @Param('id') teacherId: number,
-    @Body() reviewData: TeacherReview,
-  ): { result: boolean; data: TeacherReview; message: string } {
-    const teacherProfile = this.teacherProfiles.find(
-      (profile) => profile.id === teacherId,
-    );
+
 
     if (!teacherProfile) {
-      throw new NotFoundException(
-        '해당 ID의 선생님 프로필을 찾을 수 없습니다.',
-      );
+      throw new NotFoundException("해당 ID의 선생님 프로필을 찾을 수 없습니다.");
     }
-
-    const newReview: TeacherReview = {
-      id: this.teacherReviewIdCounter++,
-      userId: reviewData.userId,
-      rating: reviewData.rating,
-      comment: reviewData.comment,
-      // 다른 리뷰 데이터들
-    };
-
-    teacherProfile.reviews.push(newReview);
 
     return {
       result: true,
-      message: '선생님 프로필에 리뷰가 작성되었습니다.',
-      data: newReview,
+      message: "선생님 프로필을 조회합니다.",
+      data: teacherProfile,
     };
   }
 
-  @Get(':id/reviews')
-  getTeacherReviews(@Param('id') teacherId: number): {
+  // 선생님 리뷰 조회 API
+  @ApiOperation({ summary: "선생님 리뷰 조회", description: "선생님의 리뷰 목록을 조회합니다." })
+  @ApiQuery({ name: "id", description: "Teacher ID", type: Number })
+  @ApiResponse({
+    status: 200,
+    description: "Success",
+    schema: {
+      type: 'object',
+      properties: {
+        result: { type: 'boolean' },
+        data: { $ref: 'TeacherReview' },
+        message: { type: 'string' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: "Not Found",
+    schema: {
+      type: 'object',
+      properties: {
+        result: { type: 'boolean' },
+        data: { $ref: 'Null' },
+        message: { type: 'string' },
+      },
+    },
+  })
+  @Get(":id/reviews")
+  getTeacherReviews(@Param("id") teacherId: number): {
     result: boolean;
     data: TeacherReview[];
     message: string;
   } {
-    const teacherProfile = this.teacherProfiles.find(
-      (profile) => profile.id === teacherId,
-    );
+    const teacherProfile = this.teachers.find((teacher) => teacher.childname === String(teacherId));
 
     if (!teacherProfile) {
-      throw new NotFoundException(
-        '해당 ID의 선생님 프로필을 찾을 수 없습니다.',
-      );
+      throw new NotFoundException("해당 ID의 선생님 프로필을 찾을 수 없습니다.");
     }
 
     return {
       result: true,
-      message: '선생님의 리뷰를 조회합니다.',
+      message: "선생님의 리뷰를 조회합니다.",
       data: teacherProfile.reviews,
     };
   }
 
-  @Get('review-4.5')
-  getTeachersWithReviewScore4_5(): {
+  // 선생님 글쓰기 목록 조회 API
+  @ApiOperation({ summary: "선생님 글쓰기 목록 조회", description: "선생님 글쓰기 목록을 조회합니다." })
+  @ApiResponse({
+    status: 200,
+    description: "Success",
+    schema: {
+      type: 'object',
+      properties: {
+        result: { type: 'boolean' },
+        data: { $ref: 'TeacherProfile' },
+        message: { type: 'string' },
+      },
+    },
+  })
+  @Get("writing")
+  getTeacherWritingList(): {
     result: boolean;
+    data: TeacherProfile[];
     message: string;
-    data: Teacher[];
   } {
-    const filteredTeachers = this.teachers.filter(
-      (teacher) => teacher.reviewScore === 4.5,
-    );
+    // 선생님 글쓰기 목록 조회 로직을 구현해야 합니다.
+    // 이 예제에서는 teachers 배열에 있는 선생님 프로필들을 그대로 반환합니다.
     return {
       result: true,
-      message: 'Review가 4.5인 선생님 목록을 조회합니다.',
-      data: filteredTeachers,
-    };
-  }
-
-  @Get('popular')
-  getPopularTeachers(): { result: boolean; message: string; data: Teacher[] } {
-    const sortedTeachers = this.teachers.sort(
-      (a, b) => b.reviewScore - a.reviewScore,
-    );
-    return {
-      result: true,
-      message: '인기 급상승한 선생님 목록을 조회합니다.',
-      data: sortedTeachers,
-    };
-  }
-
-  @Get('nearby')
-  getNearbyTeachers(): { result: boolean; message: string; data: Teacher[] } {
-    // 여기에서 사용자의 위치 정보를 받아와서 선생님과의 거리를 계산하여 가까운 순서대로 정렬.
-    // 하지만 거리 계산을 위한 기능은 여기서 구현 x
-    return {
-      result: true,
-      message: '거리가 가까운 선생님 목록을 조회합니다.',
+      message: "선생님 글쓰기 목록을 조회합니다.",
       data: this.teachers,
     };
   }

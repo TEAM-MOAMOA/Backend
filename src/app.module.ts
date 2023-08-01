@@ -1,24 +1,24 @@
 import { Module } from '@nestjs/common';
-import { LessonModule } from './module/lesson/lesson.module';
-import { TalentListModule } from './module/talent-list/talent-list.module';
 import { TeacherModule } from './module/teacher/teacher.module';
 import { UserModule } from './module/user/user.module';
-import { PostModule } from './module/post/post.module';
+import { BoardModule } from './module/board/board.module';
+import { PopularModule } from './module/popular/module/popular.module';
 import { ConfigModule } from '@nestjs/config';
+import { LessonController } from './module/lesson/lesson.controller';
 import configuration from './config/configuration';
+
 
 @Module({
   imports: [
-    LessonModule,
-    TalentListModule,
     TeacherModule,
     UserModule,
-    PostModule,
+    BoardModule,
+    PopularModule,
     ConfigModule.forRoot({
       load: [configuration],
     }),
   ],
-  controllers: [],
+  controllers: [LessonController],
   providers: [],
 })
 export class AppModule {}

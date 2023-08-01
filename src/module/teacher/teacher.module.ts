@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TeacherController } from './teacher.controller';
-import { LessonModule } from '../lesson/lesson.module';
+import { TeacherService } from './teacher.service';
 
 @Module({
-  imports: [LessonModule],
   controllers: [TeacherController],
-  providers: [],
+  providers: [TeacherService],
 })
 export class TeacherModule {}

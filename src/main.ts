@@ -1,24 +1,23 @@
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
+import { NestApplication } from '@nestjs/core';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
+  const app: NestApplication = await NestFactory.create(AppModule);
 
-  const openApiBuilder = new DocumentBuilder()
-    .setTitle('모아모아 API')
-    .setDescription('모아모아 API 입니다.')
+  const config = new DocumentBuilder()
+    .setTitle('MOAmoa api')
+    .setDescription('모아모아 api입니다')
     .setVersion('1.0')
-    .addTag('Lesson')
-    .addTag('Teacher')
-    .addTag('User')
+    .addTag('users', 'User operations') // Add tags for your controllers here
+    .addTag('board')
+    .addTag('teacher')
+    .addTag('popular')
     .build();
-
-  const document = SwaggerModule.createDocument(app, openApiBuilder);
+  const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(configService.get('PORT'));
+  await app.listen(3000);
 }
 bootstrap();
